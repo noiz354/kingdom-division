@@ -90,9 +90,9 @@ fn solve_for(
     dp: &mut Vec<Vec<Vec<i64>>>,
     root: usize,
     color: usize,
-    streak: usize,
+    streak: usize, // current node's parent same as the color of current node
 ) -> i64 {
-    println!("{} {} {}", root, color, streak);
+    println!("enter {} {} {}", root, color, streak);
     use std::i64::MAX;
     if dp[root][color][streak] != MAX {
         return dp[root][color][streak];
@@ -107,11 +107,11 @@ fn solve_for(
     };
 
     if leaf(deps, parent, root) {
-        if streak == 1 {
+        if streak == 1 { // different
             dp[root][color][streak] = 0;
             return dp[root][color][streak];
         }
-        if streak == 2 {
+        if streak == 2 { // same 
             dp[root][color][streak] = 1;
             return dp[root][color][streak];
         }
@@ -129,11 +129,14 @@ fn solve_for(
             invalid=(invalid*solve_for(deps, parent, dp, node.index(), color_invert(color),1))%MOD;
             valid+=solve_for(deps, parent, dp, node.index(),color,2);
             ans=(ans*valid)%MOD;
+\
+            println!("{:?} color {} streak {} valid {} invalid {} ans {}",node, color,streak,valid,invalid, ans);
+            // println!("{:?} ans {}", node, ans);
         }
         // println!("{:?}", node);
     }
 
-    println!("root {} {} {} {} {} ans {}",root, color,streak,valid,invalid, ans);
+    println!("root {} color {} streak {} valid {} invalid {} ans {}",root, color,streak,valid,invalid, ans);
 
     if streak==1 {
         ans=(ans-invalid+MOD)%MOD;
